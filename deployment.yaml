@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: eks-sample-linux-app
-  name: eks-sample-linux-deployment
+  name: eks-sample-linux-deployment-test
 spec:
   replicas: 3
   selector:
@@ -24,19 +24,28 @@ spec:
                 values:
                 - amd64
                 - arm64
+      volumes:
+      - name: log-volume
+        hostPath:
+          path: /var/log/nginx
+      containers:
+      - name: nginx
+        image: nginx
+        volumeMounts:
+        - name: log-volume
+          mountPath: /var/log/nginx
+      - name: log-updater
+        image: alpine
+        volumeMounts:
+        - name: log-volume
+          mountPath: /var/log/nginx-host
+        command: ["/bin/sh"]
+        args: ["-c", "while true; do cp -u /var/log/nginx/*.log /var/log/nginx-host && sleep 120; done"]
+
       containers:
       - image: public.ecr.aws/nginx/nginx:1.21
         imagePullPolicy: IfNotPresent
         name: nginx
-        command: ["/bin/sh"]
-        args: ["-c", "while true; do date >> /var/log/1/nginx.log 2>&1; sleep 1; done"]
-        volumeMounts:
-        - name: logs-volume
-          mountPath: /var/log/1
-    volumes:
-    - name: logs-volume
-      hostPath:
-        path: /var/log/1
         ports:
         - containerPort: 80
           name: http
