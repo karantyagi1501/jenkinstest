@@ -16,6 +16,5 @@ data['spec']['template']['spec']['containers'][0]['resources']['limits']['cpu'] 
 data['spec']['template']['spec']['containers'][0]['image'] = j
 
 
-
 with open(fname, 'w') as yaml_file:
     yaml_file.write( yaml.dump(data, default_flow_style=False))
