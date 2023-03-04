@@ -52,4 +52,3 @@ spec:
   selector:
     app: mysql
   type: LoadBalancer
-  
