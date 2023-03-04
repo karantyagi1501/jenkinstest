@@ -12,17 +12,7 @@ spec:
         app: mysql
     spec:
       containers:
-      - image: {IMAGE_NAME}
-        name: main-application
-        ports: null
-        resources:
-          limits:
-            cpu: 100
-            memory: 100
-          requests:
-            cpu: 100
-            memory: 100
-        image: mysql:5.6
+      - image: mysql:5.6
         name: mysql
         env:
         - name: MYSQL_ROOT_PASSWORD
